@@ -59,6 +59,8 @@ public class GsonRequest<T> extends Request<T> {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
             Log.i("JSONRESULT", jsonString); // 打印返回结果
+            Log.d("这是状态码", String.valueOf(response.statusCode));
+
             return Response.success(mGson.fromJson(jsonString, mClass),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
