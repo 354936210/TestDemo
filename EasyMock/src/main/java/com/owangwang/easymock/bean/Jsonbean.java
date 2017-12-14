@@ -10,6 +10,14 @@ public class Jsonbean {
     boolean success;
     List<Usersbean> users;
 
+    @Override
+    public String toString() {
+        return "Jsonbean{" +
+                "success=" + success +
+                ", users=" + users +
+                '}';
+    }
+
     public boolean isSuccess() {
         return success;
     }

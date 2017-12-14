@@ -21,23 +21,27 @@ public class GsonRequest<T> extends Request<T> {
     private final Response.Listener<T> mListener;
     private Gson mGson;
     private Class<T> mClass;
+    String TAG="GsonRequest";
     public GsonRequest(int method, String url, Class<T> clazz,
                        Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         mGson = new Gson();
         mClass = clazz;
         mListener = listener;
+        Log.d(TAG,url);
     }
     public GsonRequest(String url, Class<T> clazz, Response.Listener<T> listener,
                        Response.ErrorListener errorListener) {
         // 这里可以设置post和get两种，post保密点
         this(Method.POST, url, clazz, listener, errorListener);
+        Log.d(TAG,url);
     }
     // 此方式可通过post方式传递String类型参数
     public GsonRequest(String url, Map<String, String> params, Class<T> clazz,
                        Response.Listener<T> listener, Response.ErrorListener errorListener) {
         // 这里可以设置post和get两种，post保密点
         this(Method.POST, url, clazz, listener, errorListener);
+
     }
     /**
      * HTTP请求报错处理
@@ -64,5 +68,6 @@ public class GsonRequest<T> extends Request<T> {
     @Override
     protected void deliverResponse(T response) {
         mListener.onResponse(response);
+
     }
 }
