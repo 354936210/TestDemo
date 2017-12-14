@@ -35,7 +35,7 @@
         android:layout_height="wrap_content" />
     <EditText
         android:singleLine="true"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:background="@null"
         android:id="@+id/et_kuaidi_id"
         android:layout_width="match_parent"
@@ -92,7 +92,8 @@
         android:id="@+id/rv_express"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
