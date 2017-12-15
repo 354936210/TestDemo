@@ -2,69 +2,45 @@ package com.owangwang.easymock;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.owangwang.easymock.bean.Jsonbean;
-import com.owangwang.easymock.bean.KuaiDibean;
+import com.owangwang.easymock.bean.MyTypeData;
+import com.owangwang.easymock.bean.SaveEvent;
+import com.owangwang.easymock.bean.WoDeKuaiDi;
 import com.owangwang.easymock.utils.AppConfig;
 
-import java.util.ArrayList;
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import de.greenrobot.event.EventBus;
 
-
-    Button btRequest;
-    RecyclerView rv;
-    List<KuaiDibean> mList;
-    RequestQueue mQueue;
-    MyAdapter myAdapter;
-
+public class MainActivity extends AppCompatActivity {
+    TextView tv_note;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mList=new ArrayList<>();
-
-        btRequest=findViewById(R.id.bt_request);
-        LinearLayoutManager manager=new LinearLayoutManager(this);
-        rv=findViewById(R.id.rv);
-        rv.setLayoutManager(manager);
-        btRequest.setOnClickListener(this);
-        mQueue = AppConfig.myQueue(this);
-
+        setContentView(R.layout.express_manager_layout);
+        tv_note=findViewById(R.id.tv_note);
+        EventBus.getDefault().register(this);
     }
 
-
-
-    public void doRequest(String url){
-        GsonRequest<Jsonbean> gsonRequest=new GsonRequest<Jsonbean>(url, Jsonbean.class, new Response.Listener<Jsonbean>() {
-            @Override
-            public void onResponse(Jsonbean jsonbean) {
-                mList=jsonbean.getResult();
-                myAdapter=new MyAdapter(mList,MainActivity.this);
-                rv.setAdapter(myAdapter);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        });
-
-        mQueue.add(gsonRequest);
+    public void onEventMainThread(SaveEvent event) {
+        List<MyTypeData> typeData= DataSupport.select("name").where("type=?",event.getType().toUpperCase()).find(MyTypeData.class);
+        String name=typeData.get(0).getName();
+        WoDeKuaiDi kuaiDi=new WoDeKuaiDi();
+        kuaiDi.setName(name);
+        kuaiDi.setNumber(event.getNumber());
+        kuaiDi.setStatus(event.getDeliverystatus());
+        //保存到数据库
+        kuaiDi.save();
+        //将list也添加此数据
+        AppConfig.mList.add(kuaiDi);
+        //提醒recyclerview数据更改了
+        AppConfig.adapter.notifyDataSetChanged();
+        tv_note.setVisibility(View.GONE);
+        Log.d("是否执行","111111111");
     }
-
-    @Override
-    public void onClick(View v) {
-        doRequest("http://api.jisuapi.com/express/type?appkey=98e3089a2762b1b2");
-    }
-
-
 }

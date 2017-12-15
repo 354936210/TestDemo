@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context="com.owangwang.easymock.MainActivity"
     android:orientation="vertical">
-    <Button
-        android:id="@+id/bt_request"
+    <TextView
+        android:paddingBottom="10dp"
+        android:id="@+id/tv_title"
+        android:text="我的快递"
+        android:textSize="25sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="请求数据"/>
+        android:gravity="center"
+        />
+    <View
+        android:layout_below="@+id/tv_title"
+        android:background="#c2bfbf"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+<TextView
+    android:id="@+id/tv_note"
+    android:text="暂无快递"
+    android:gravity="center"
+    android:layout_below="@+id/tv_title"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 <android.support.v7.widget.RecyclerView
+
+    android:layout_below="@+id/tv_title"
     android:id="@+id/rv"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1">
+    android:layout_height="match_parent">
 
 </android.support.v7.widget.RecyclerView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bt_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="11dp"
+        android:layout_marginEnd="14dp"
+        android:src="@mipmap/ic_add_white_36dp" />
 
-</LinearLayout>
+</RelativeLayout>
