@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DoMainQueryActivity"/>
-        <activity android:name=".AddExpressActivity"/>
+        <activity android:name=".AddExpressActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

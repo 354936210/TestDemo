@@ -18,7 +18,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
-    TextView tv_note;
+    private TextView tv_note;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         String name=typeData.get(0).getName();
         WoDeKuaiDi kuaiDi=new WoDeKuaiDi();
         kuaiDi.setName(name);
+        kuaiDi.setType(event.getType());
         kuaiDi.setNumber(event.getNumber());
         kuaiDi.setStatus(event.getDeliverystatus());
         //保存到数据库

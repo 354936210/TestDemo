@@ -14,15 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.owangwang.easymock.bean.AddEvent;
 import com.owangwang.easymock.bean.ExpressJson;
+import com.owangwang.easymock.bean.IsSuccessEvent;
 import com.owangwang.easymock.bean.Jsonbean;
 import com.owangwang.easymock.bean.KuaiDibean;
 import com.owangwang.easymock.bean.MyTypeData;
 import com.owangwang.easymock.bean.SaveEvent;
+import com.owangwang.easymock.bean.WoDeKuaiDi;
 import com.owangwang.easymock.utils.AppConfig;
 
 import org.litepal.LitePal;
@@ -38,23 +42,25 @@ import de.greenrobot.event.EventBus;
  */
 
 public class AddExpressActivity extends AppCompatActivity implements View.OnClickListener {
-    Adapter arrayAdapter;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    List<KuaiDibean> mList;
-    List<String> nameList;
-    List<String> typeList;
-    RequestQueue mQueue;
-    Spinner selectType;
+    private boolean issuccess=false;
+    private Adapter arrayAdapter;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private List<KuaiDibean> mList;
+    private List<String> nameList;
+    private List<String> typeList;
+    private RequestQueue mQueue;
+    private Spinner selectType;
 
-    EditText etSaveNumber;
+    private EditText etSaveNumber;
 
-    Button btSave;
-    String type;
+    private Button btSave;
+    private String type;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_express_layout);
+        EventBus.getDefault().register(this);
         mQueue= AppConfig.myQueue(this);
         selectType=findViewById(R.id.select_type);
         etSaveNumber=findViewById(R.id.et_save_number);
@@ -96,14 +102,13 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
             for (MyTypeData mdata:typeData){
                 typeList.add(mdata.getType());
                 nameList.add(mdata.getName());
-                Log.d("name",mdata.getName());
-                Log.d("type",mdata.getType());
+//                Log.d("name",mdata.getName());
+//                Log.d("type",mdata.getType());
             }
         }
     }
     public void saveExpress(){
         doQuery(etSaveNumber.getText().toString(),type);
-        finish();
     }
     /**
      * 查询快递运送状态
@@ -128,14 +133,16 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
                                     expressJson.getResult().getNumber(),
                                     expressJson.getResult().getDeliverystatus()
                             ));
-                        }else {
+                            EventBus.getDefault().post(new IsSuccessEvent(true));
 
+                        }else {
+                            EventBus.getDefault().post(new IsSuccessEvent(false));
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                EventBus.getDefault().post(new IsSuccessEvent(false));
             }
         });
         mQueue.add(gsonRequest);
@@ -173,6 +180,7 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
                     editor.putBoolean("isfirst",false);
                     editor.commit();
                     EventBus.getDefault().post("1");
+                    EventBus.getDefault().post(new AddEvent());
                 }
             }
 
@@ -189,9 +197,32 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (!TextUtils.isEmpty(etSaveNumber.getText())){
-            saveExpress();
+            List<WoDeKuaiDi> kuaiDisList;
+            kuaiDisList=DataSupport.select().where("number=?",etSaveNumber.getText().toString()).find(WoDeKuaiDi.class);
+            if (kuaiDisList.isEmpty()){
+                saveExpress();
+            }
+            else {
+                etSaveNumber.setError("此快递已保存!");
+            }
         }else {
             etSaveNumber.setError("请填写快递单号!");
+        }
+    }
+
+    public void onEventMainThread(AddEvent s) {
+        arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,nameList);
+        selectType.setAdapter((SpinnerAdapter) arrayAdapter);
+        selectType.setSelection(0);
+
+    }
+    public void onEventMainThread(IsSuccessEvent s) {
+        if (s.isS()){
+            Toast.makeText(AddExpressActivity.this,"保存成功！",Toast.LENGTH_SHORT).show();
+            finish();
+        }else {
+            Toast.makeText(AddExpressActivity.this,"请确定快递单号和快递公司是否准确！",Toast.LENGTH_SHORT).show();
         }
     }
 }

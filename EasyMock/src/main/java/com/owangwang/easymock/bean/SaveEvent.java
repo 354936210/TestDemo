@@ -7,10 +7,28 @@ import org.litepal.crud.DataSupport;
  */
 
 public class SaveEvent extends DataSupport{
+    String type;
+
+    public SaveEvent(String type, String name, String number, String deliverystatus) {
+        this.type = type;
+        this.name = name;
+        this.number = number;
+        this.deliverystatus = deliverystatus;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     /**
      * 快递公司名
      */
-    String type;
+    String name;
     /**
      * 快递单号
      */
@@ -22,11 +40,11 @@ public class SaveEvent extends DataSupport{
 
 
     public String getType() {
-        return type;
+        return name;
     }
 
-    public SaveEvent(String type, String number, String deliverystatus) {
-        this.type = type;
+    public SaveEvent(String name, String number, String deliverystatus) {
+        this.name = name;
         this.number = number;
         this.deliverystatus = deliverystatus;
     }

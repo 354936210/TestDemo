@@ -3,11 +3,13 @@ package com.owangwang.easymock;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +40,7 @@ public class MyExpressFragment extends Fragment{
     TextView tv_note;
     FloatingActionButton bt_add;
     MyAdapter adapter;
+    TextView tv_title;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +51,9 @@ public class MyExpressFragment extends Fragment{
 
         tv_note=view.findViewById(R.id.tv_note);
         bt_add=view.findViewById(R.id.bt_add);
+        tv_title=view.findViewById(R.id.tv_title);
+        Typeface mtypeface= Typeface.createFromAsset(context.getAssets(),"fonts/STHUPO.TTF");
+        tv_title.setTypeface(mtypeface);
         init();
 
 
@@ -81,6 +88,38 @@ public class MyExpressFragment extends Fragment{
             manager=new LinearLayoutManager(context);
             recyclerView.setLayoutManager(manager);
             recyclerView.setAdapter(AppConfig.adapter);
+        //为RecycleView绑定触摸事件
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                //首先回调的方法 返回int表示是否监听该方向
+                int dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN;//拖拽
+                int swipeFlags = ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;//侧滑删除
+                return makeMovementFlags(dragFlags,swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                //滑动事件
+                Collections.swap(mList,viewHolder.getAdapterPosition(),target.getAdapterPosition());
+                adapter.notifyItemMoved(viewHolder.getAdapterPosition(),target.getAdapterPosition());
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                //侧滑事件
+                mList.remove(viewHolder.getAdapterPosition());
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                //是否可拖拽
+                return true;
+            }
+        });
+        helper.attachToRecyclerView(recyclerView);
 
     }
     public void onEventMainThread(SaveEvent event) {

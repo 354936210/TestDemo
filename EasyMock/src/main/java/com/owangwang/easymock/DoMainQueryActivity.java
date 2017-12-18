@@ -1,5 +1,6 @@
 package com.owangwang.easymock;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,25 +45,25 @@ import de.greenrobot.event.EventBus;
  */
 
 public class DoMainQueryActivity extends AppCompatActivity {
-    List<KuaiDibean> mList;
-    TextView tv_status;
-    TextView tv_name_and_number;
-    LinearLayout layout_show;
-    RequestQueue mQueue;
-    RecyclerView rv_express;
-    ExpressAdapter expressAdapter;
-    Button bt_query;
-    EditText et_id;
-    Adapter arrayAdapter;
-    Spinner spinner;
-    List<String> nameList;
-    List<String> typeList;
-    List<MyExpress> myExpressesList;
-    String type="auto";
-    String tag="DoMainQueryActivity--------->";
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    int position;
+    private List<KuaiDibean> mList;
+    private TextView tv_status;
+    private TextView tv_name_and_number;
+    private LinearLayout layout_show;
+    private RequestQueue mQueue;
+    private RecyclerView rv_express;
+    private ExpressAdapter expressAdapter;
+    private Button bt_query;
+    private EditText et_id;
+    private Adapter arrayAdapter;
+    private Spinner spinner;
+    private List<String> nameList;
+    private List<String> typeList;
+    private List<MyExpress> myExpressesList;
+    private String type="auto";
+    private String tag="DoMainQueryActivity--------->";
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private int position;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +74,13 @@ public class DoMainQueryActivity extends AppCompatActivity {
 //        position=getIntent().getIntExtra("position",0);
 //        type=typeList.get(position);
         iniview();
-
-
-
+        Intent inten=getIntent();
+        String nummber=inten.getStringExtra("mnumber");
+        if (nummber!=null){
+            et_id.setText(nummber);
+            type=inten.getStringExtra("mtype");
+            doQuery(nummber,type);
+        }
     }
 
     private void iniview() {
@@ -99,7 +104,6 @@ public class DoMainQueryActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 type=typeList.get(position);
-                Log.d(tag,"type:"+type);
             }
 
             @Override
@@ -134,8 +138,6 @@ public class DoMainQueryActivity extends AppCompatActivity {
             for (MyTypeData mdata:typeData){
                 typeList.add(mdata.getType());
                 nameList.add(mdata.getName());
-                Log.d("name",mdata.getName());
-                Log.d("type",mdata.getType());
             }
         }
     }
@@ -160,13 +162,6 @@ public class DoMainQueryActivity extends AppCompatActivity {
                             expressAdapter = new ExpressAdapter(myExpressesList, DoMainQueryActivity.this);
                             rv_express.setAdapter(expressAdapter);
                             layout_show.setVisibility(View.VISIBLE);
-
-//                            for (String s:typeList
-//                                 ) {
-//                                if (s.equals(expressJson.getResult().getType())){
-//                                    tv_name_and_number.setText(nameList.get(typeList.indexOf(s))+":"+expressJson.getResult().getNumber());
-//                                }
-//                            }
                             EventBus.getDefault().post(new StatusEvent(expressJson.getResult().getDeliverystatus()));
 
                             EventBus.getDefault().post(new TypeEvent(expressJson.getResult().getType()));
@@ -247,7 +242,6 @@ public class DoMainQueryActivity extends AppCompatActivity {
         Log.d("wangchao",s);
         int i=0;
         for (String ss:typeList){
-            Log.d("wangchao",ss);
             if (ss.equals(s)){
                 tv_name_and_number.setText(nameList.get(i));
             }
