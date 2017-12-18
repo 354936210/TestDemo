@@ -68,6 +68,7 @@
             android:id="@+id/cv_delete"
             >
             <ImageView
+                android:id="@+id/iv_delete"
                 android:src="@mipmap/ic_remove_white_36dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

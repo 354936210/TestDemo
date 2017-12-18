@@ -5,9 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owangwang.easymock.bean.WoDeKuaiDi;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -60,13 +64,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_number;
         TextView tv_name;
+        ImageView iv_delete;
 //        ImageView iv_touxiang;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
 
             super(itemView);
             tv_number=itemView.findViewById(R.id.tv_number);
             tv_name=itemView.findViewById(R.id.tv_name);
+            iv_delete=itemView.findViewById(R.id.iv_delete);
+            iv_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position=getAdapterPosition();
+                    int result= DataSupport.deleteAll(WoDeKuaiDi.class,"number=?",mList.get(position).getNumber());
+                    if (result!=-1)
+                    {
+                        Toast.makeText(itemView.getContext(),"已删除!",Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                    }
+                }
+            });
 //            iv_touxiang=itemView.findViewById(R.id.iv_touxiang);
         }
     }

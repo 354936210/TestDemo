@@ -260,4 +260,11 @@ public class DoMainQueryActivity extends AppCompatActivity {
             tv_status.setText("派送失败");
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("11111","asfasfasf");
+        EventBus.getDefault().unregister(this);
+    }
 }

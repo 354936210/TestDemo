@@ -225,4 +225,10 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(AddExpressActivity.this,"请确定快递单号和快递公司是否准确！",Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

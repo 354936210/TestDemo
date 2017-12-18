@@ -102,15 +102,23 @@ public class MyExpressFragment extends Fragment{
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 //滑动事件
                 Collections.swap(mList,viewHolder.getAdapterPosition(),target.getAdapterPosition());
+
                 adapter.notifyItemMoved(viewHolder.getAdapterPosition(),target.getAdapterPosition());
                 return false;
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                //侧滑事件
-                mList.remove(viewHolder.getAdapterPosition());
-                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                Log.d("kkkkkkkkk",mList.get(viewHolder.getAdapterPosition()).getNumber());
+                int result=DataSupport.deleteAll(WoDeKuaiDi.class,"number=?",mList.get(viewHolder.getAdapterPosition()).getNumber());
+
+                if (result!=-1){
+                    //侧滑事件
+                    mList.remove(viewHolder.getAdapterPosition());
+
+                    adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                }
+
             }
 
             @Override
