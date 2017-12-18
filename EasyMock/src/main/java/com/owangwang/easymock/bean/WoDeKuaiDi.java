@@ -11,6 +11,7 @@ public class WoDeKuaiDi extends DataSupport{
     public String toString() {
         return "WoDeKuaiDi{" +
                 "name='" + name + '\'' +
+                ", type='" + type + '\'' +
                 ", number='" + number + '\'' +
                 ", status='" + status + '\'' +
                 '}';
@@ -23,6 +24,16 @@ public class WoDeKuaiDi extends DataSupport{
     /**
      * 快递单号
      */
+    String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     String number;
     /**
      * 快递运送状态
