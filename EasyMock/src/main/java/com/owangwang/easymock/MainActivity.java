@@ -139,8 +139,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        time=System.currentTimeMillis();
+        if (time!=0){
+            long sx=(System.currentTimeMillis()-time)/1000;
+            if (sx<=2){
+                finish();
+            }
+        }else {
+            Toast.makeText(this,"请再次按返回键退出",Toast.LENGTH_SHORT).show();
+            time=System.currentTimeMillis();
+        }
 
-        super.onBackPressed();
+
     }
 }
