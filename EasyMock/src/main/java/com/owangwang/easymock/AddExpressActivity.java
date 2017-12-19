@@ -1,5 +1,6 @@
 package com.owangwang.easymock;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,6 +43,7 @@ import de.greenrobot.event.EventBus;
  */
 
 public class AddExpressActivity extends AppCompatActivity implements View.OnClickListener {
+    AlertDialog alertDialog;
     private boolean issuccess=false;
     private Adapter arrayAdapter;
     private SharedPreferences preferences;
@@ -53,13 +55,17 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
     private Spinner selectType;
 
     private EditText etSaveNumber;
-
+    View progressView;
     private Button btSave;
     private String type;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_express_layout);
+
+
+
+
         EventBus.getDefault().register(this);
         mQueue= AppConfig.myQueue(this);
         selectType=findViewById(R.id.select_type);
@@ -95,6 +101,7 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
         mList=new ArrayList<>();
 
         if (preferences.getBoolean("isfirst",true)){
+            showDialog();
             LitePal.getDatabase();
             doRequest();
         }else {
@@ -105,6 +112,28 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
 //                Log.d("name",mdata.getName());
 //                Log.d("type",mdata.getType());
             }
+        }
+    }
+
+    /**
+     * 显示dialog
+     */
+    private void showDialog() {
+        if (alertDialog==null){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        progressView= View.inflate(AddExpressActivity.this, R.layout.progress_layout,null);
+        builder.setView(progressView);
+        alertDialog=builder.create();
+        }
+        alertDialog.show();
+    }
+
+    /**
+     * 取消dialog显示
+     */
+    private void cancleDialog(){
+        if (alertDialog!=null) {
+            alertDialog.dismiss();
         }
     }
     public void saveExpress(){
@@ -134,7 +163,7 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
                                     expressJson.getResult().getDeliverystatus()
                             ));
                             EventBus.getDefault().post(new IsSuccessEvent(true));
-
+                            cancleDialog();
                         }else {
                             EventBus.getDefault().post(new IsSuccessEvent(false));
                         }
@@ -196,10 +225,11 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (!TextUtils.isEmpty(etSaveNumber.getText())){
+        if (!TextUtils.isEmpty(etSaveNumber.getText().toString().trim())){
             List<WoDeKuaiDi> kuaiDisList;
             kuaiDisList=DataSupport.select().where("number=?",etSaveNumber.getText().toString()).find(WoDeKuaiDi.class);
             if (kuaiDisList.isEmpty()){
+                showDialog();
                 saveExpress();
             }
             else {
@@ -215,8 +245,14 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
                 android.R.layout.simple_spinner_item,nameList);
         selectType.setAdapter((SpinnerAdapter) arrayAdapter);
         selectType.setSelection(0);
+        cancleDialog();
 
     }
+
+    /**
+     * 根据eventbus的消息判断是否保存成功
+     * @param s
+     */
     public void onEventMainThread(IsSuccessEvent s) {
         if (s.isS()){
             Toast.makeText(AddExpressActivity.this,"保存成功！",Toast.LENGTH_SHORT).show();

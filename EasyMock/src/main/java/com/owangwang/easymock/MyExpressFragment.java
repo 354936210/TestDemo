@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owangwang.easymock.bean.MyTypeData;
 import com.owangwang.easymock.bean.SaveEvent;
@@ -117,6 +118,7 @@ public class MyExpressFragment extends Fragment{
                     mList.remove(viewHolder.getAdapterPosition());
 
                     adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    Toast.makeText(context,"删除成功!",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -124,7 +126,7 @@ public class MyExpressFragment extends Fragment{
             @Override
             public boolean isLongPressDragEnabled() {
                 //是否可拖拽
-                return true;
+                return false;
             }
         });
         helper.attachToRecyclerView(recyclerView);
@@ -144,6 +146,7 @@ public class MyExpressFragment extends Fragment{
         //提醒recyclerview数据更改了
         adapter.notifyDataSetChanged();
     }
+
 
 
 }

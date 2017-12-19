@@ -69,10 +69,7 @@ public class DoMainQueryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.query_kuaidi);
         initdata();
-//        typeList=getIntent().getStringArrayListExtra("typelist");
-//        nameList=getIntent().getStringArrayListExtra("namelist");
-//        position=getIntent().getIntExtra("position",0);
-//        type=typeList.get(position);
+
         iniview();
         Intent inten=getIntent();
         String nummber=inten.getStringExtra("mnumber");

@@ -12,11 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-    <ImageView
-    android:id="@+id/iv_touxiang"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:src="@mipmap/ic_launcher"/>
+        <android.support.v7.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="25dp"
+            app:cardBackgroundColor="#16e4f3">
+            <TextView
+                android:id="@+id/tv_touxiang"
+                android:gravity="center"
+                android:text="已签收"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#fa7407"/>
+        </android.support.v7.widget.CardView>
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_touxiang"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:src="@mipmap/ic_launcher"/>-->
     <LinearLayout
         android:background="#16e4d3"
         android:paddingLeft="20dp"
