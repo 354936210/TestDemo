@@ -10,6 +10,7 @@
     <TextView
         android:paddingBottom="10dp"
         android:id="@+id/tv_title"
+        android:textColor="#1590a6"
         android:text="我的快递"
         android:textSize="25sp"
         android:layout_width="match_parent"
@@ -52,6 +53,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/bt_add"
+        app:backgroundTint="@color/lastColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

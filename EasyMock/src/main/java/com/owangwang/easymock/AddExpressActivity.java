@@ -2,19 +2,18 @@ package com.owangwang.easymock;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -45,7 +44,7 @@ import de.greenrobot.event.EventBus;
 public class AddExpressActivity extends AppCompatActivity implements View.OnClickListener {
     AlertDialog alertDialog;
     private boolean issuccess=false;
-    private Adapter arrayAdapter;
+    private ArrayAdapter arrayAdapter;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private List<KuaiDibean> mList;
@@ -74,8 +73,9 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
         btSave.setOnClickListener(this);
         initdata();
         arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,nameList);
-        selectType.setAdapter((SpinnerAdapter) arrayAdapter);
+                R.layout.spinner_item_layout,nameList);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item_layout1);
+        selectType.setAdapter(arrayAdapter);
         selectType.setSelection(0);
         type="auto";
         selectType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -242,8 +242,9 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
 
     public void onEventMainThread(AddEvent s) {
         arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,nameList);
-        selectType.setAdapter((SpinnerAdapter) arrayAdapter);
+                R.layout.spinner_item_layout,nameList);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item_layout1);
+        selectType.setAdapter(arrayAdapter);
         selectType.setSelection(0);
         cancleDialog();
 
@@ -266,5 +267,19 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 }

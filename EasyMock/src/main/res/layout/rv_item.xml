@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    app:cardBackgroundColor="#16e4d3"
+    app:cardBackgroundColor="#077b6f"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="5dp">
     <LinearLayout
@@ -16,7 +16,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:cardCornerRadius="25dp"
-            app:cardBackgroundColor="#16e4f3">
+            app:cardBackgroundColor="#0e9da7">
             <TextView
                 android:id="@+id/tv_touxiang"
                 android:gravity="center"
@@ -31,7 +31,6 @@
     <!--android:layout_height="50dp"-->
     <!--android:src="@mipmap/ic_launcher"/>-->
     <LinearLayout
-        android:background="#16e4d3"
         android:paddingLeft="20dp"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -74,7 +73,7 @@
     </LinearLayout>
         <android.support.v7.widget.CardView
             app:cardCornerRadius="15dp"
-            app:cardBackgroundColor="#f28282"
+            app:cardBackgroundColor="#c46969"
             android:layout_gravity="center"
             android:layout_width="30dp"
             android:layout_height="30dp"

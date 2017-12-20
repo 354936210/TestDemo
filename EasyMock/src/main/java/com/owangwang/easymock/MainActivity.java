@@ -1,5 +1,6 @@
 package com.owangwang.easymock;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
+        AppConfig.myQueue(this).stop();
         EventBus.getDefault().unregister(this);
     }
 
@@ -136,16 +139,33 @@ public class MainActivity extends AppCompatActivity {
 //        mQueue.add(gsonRequest);
         return gsonRequest;
     }
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
     @Override
     public void onBackPressed() {
+
         if (time!=0){
             long sx=(System.currentTimeMillis()-time)/1000;
             if (sx<=2){
                 finish();
+            }else {
+                time=System.currentTimeMillis();
+                Toast.makeText(this,"请再次按返回键退出",Toast.LENGTH_LONG).show();
             }
         }else {
-            Toast.makeText(this,"请再次按返回键退出",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"请再次按返回键退出",Toast.LENGTH_LONG).show();
             time=System.currentTimeMillis();
         }
 

@@ -1,4 +1,4 @@
-package com.owangwang.easymock;
+package com.owangwang.easymock.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
