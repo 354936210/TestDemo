@@ -255,6 +255,7 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
      * @param s
      */
     public void onEventMainThread(IsSuccessEvent s) {
+            cancleDialog();
         if (s.isS()){
             Toast.makeText(AddExpressActivity.this,"保存成功！",Toast.LENGTH_SHORT).show();
             finish();

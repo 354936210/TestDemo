@@ -16,7 +16,7 @@
         <item
             android:id="@+id/it_3"
             android:icon="@mipmap/ic_launcher"
-            android:title="call"
+            android:title="联系我"
             />
         <item
             android:id="@+id/it_4"
