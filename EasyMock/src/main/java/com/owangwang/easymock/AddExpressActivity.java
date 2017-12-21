@@ -2,6 +2,7 @@ package com.owangwang.easymock;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -28,6 +30,7 @@ import com.owangwang.easymock.bean.MyTypeData;
 import com.owangwang.easymock.bean.SaveEvent;
 import com.owangwang.easymock.bean.WoDeKuaiDi;
 import com.owangwang.easymock.utils.AppConfig;
+import com.owangwang.easymock.utils.ExitApplication;
 
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
@@ -57,12 +60,15 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
     View progressView;
     private Button btSave;
     private String type;
+    TextView tv_title;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_express_layout);
-
-
+        ExitApplication.addAcrivity(this);
+        tv_title=findViewById(R.id.add_tv_title);
+        Typeface mtypeface= Typeface.createFromAsset(getAssets(),"fonts/STHUPO.TTF");
+        tv_title.setTypeface(mtypeface);
 
 
         EventBus.getDefault().register(this);

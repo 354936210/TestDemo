@@ -3,6 +3,7 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/dl_swipe"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/background">
 
@@ -14,33 +15,36 @@
     android:layout_height="match_parent"/>
 
     <LinearLayout
-        android:visibility="gone"
+        android:id="@+id/ll_left"
         android:layout_gravity="start"
         android:background="#ffffff"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.design.widget.NavigationView
 
+        <android.support.design.widget.NavigationView
+            android:id="@+id/na_v"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            app:menu="@menu/nav_menu"
-            app:headerLayout="@layout/head_layout">
+            app:headerLayout="@layout/head_layout"
+            app:menu="@menu/nav_menu">
 
 
         </android.support.design.widget.NavigationView>
         <LinearLayout
-            android:background="#ffffff"
+            android:background="#cc012948"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
+                android:textColor="#fff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="版本号:" />
             <TextView
+                android:textColor="#fff"
                 android:layout_marginLeft="10dp"
                 android:text="1.0.0"
                 android:layout_width="wrap_content"

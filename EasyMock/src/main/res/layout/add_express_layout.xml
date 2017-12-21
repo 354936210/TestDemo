@@ -5,6 +5,16 @@
     android:orientation="vertical"
     android:background="@mipmap/background"
     android:padding="10dp">
+    <TextView
+        android:paddingBottom="10dp"
+        android:id="@+id/add_tv_title"
+        android:textColor="#fff"
+        android:text="添加"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

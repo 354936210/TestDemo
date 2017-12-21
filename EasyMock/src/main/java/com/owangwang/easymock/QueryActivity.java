@@ -2,6 +2,7 @@ package com.owangwang.easymock;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +14,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.owangwang.easymock.bean.StatusEvent;
 import com.owangwang.easymock.bean.TypeEvent;
 import com.owangwang.easymock.utils.AppConfig;
 import com.owangwang.easymock.utils.ExitApplication;
+import com.owangwang.easymock.views.MyAlertDialog;
 
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
@@ -44,7 +46,7 @@ import de.greenrobot.event.EventBus;
  * Created by wangchao on 2017/12/14.
  */
 
-public class DoMainQueryActivity extends AppCompatActivity {
+public class QueryActivity extends AppCompatActivity {
     private List<KuaiDibean> mList;
     private TextView tv_status;
     private TextView tv_name_and_number;
@@ -53,7 +55,7 @@ public class DoMainQueryActivity extends AppCompatActivity {
     private RecyclerView rv_express;
     private ExpressAdapter expressAdapter;
     private Button bt_query;
-    private TextView et_id;
+    private EditText et_id;
     private ArrayAdapter arrayAdapter;
     private Spinner spinner;
     private List<String> nameList;
@@ -64,13 +66,15 @@ public class DoMainQueryActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private int position;
+    private MyAlertDialog dialog;
+    private TextView tv_title;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_kuaidi);
+        setContentView(R.layout.query_layout);
         ExitApplication.addAcrivity(this);
+        dialog=new MyAlertDialog(this);
         initdata();
-
         iniview();
         Intent inten=getIntent();
         String nummber=inten.getStringExtra("mnumber");
@@ -82,16 +86,20 @@ public class DoMainQueryActivity extends AppCompatActivity {
     }
 
     private void iniview() {
+
         EventBus.getDefault().register(this);
-        layout_show=findViewById(R.id.layout_show);
-        spinner=findViewById(R.id.sp);
-        bt_query=findViewById(R.id.bt_query);
-        rv_express=findViewById(R.id.rv_express);
-        tv_name_and_number=findViewById(R.id.name_and_number);
-        tv_status=findViewById(R.id.status);
+        tv_title=findViewById(R.id.query_tv_title);
+        Typeface mtypeface= Typeface.createFromAsset(getAssets(),"fonts/STHUPO.TTF");
+        tv_title.setTypeface(mtypeface);
+        layout_show=findViewById(R.id.layout_show1);
+        spinner=findViewById(R.id.sp1);
+        bt_query=findViewById(R.id.bt_query1);
+        rv_express=findViewById(R.id.rv_express1);
+        tv_name_and_number=findViewById(R.id.name_and_number1);
+        tv_status=findViewById(R.id.status1);
         LinearLayoutManager manager=new LinearLayoutManager(this);
         rv_express.setLayoutManager(manager);
-        et_id=findViewById(R.id.et_kuaidi_id);
+        et_id=findViewById(R.id.et_kuaidi_id1);
         arrayAdapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item_layout,nameList);
         arrayAdapter.setDropDownViewResource(R.layout.spinner_item_layout1);
@@ -114,6 +122,7 @@ public class DoMainQueryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String id=et_id.getText().toString();
+                dialog.showDialog();
                 doQuery(id,type);
             }
         });
@@ -131,6 +140,7 @@ public class DoMainQueryActivity extends AppCompatActivity {
 
         if (preferences.getBoolean("isfirst",true)){
             LitePal.getDatabase();
+            dialog.showDialog();
             doRequest();
         }else {
             List<MyTypeData> typeData= DataSupport.findAll(MyTypeData.class);
@@ -158,23 +168,25 @@ public class DoMainQueryActivity extends AppCompatActivity {
                     public void onResponse(ExpressJson expressJson) {
                         if (expressJson.getStatus().equals("0")) {
                             myExpressesList = expressJson.getResult().getList();
-                            expressAdapter = new ExpressAdapter(myExpressesList, DoMainQueryActivity.this);
+                            expressAdapter = new ExpressAdapter(myExpressesList, QueryActivity.this);
                             rv_express.setAdapter(expressAdapter);
                             layout_show.setVisibility(View.VISIBLE);
                             EventBus.getDefault().post(new StatusEvent(expressJson.getResult().getDeliverystatus()));
 
                             EventBus.getDefault().post(new TypeEvent(expressJson.getResult().getType()));
                         }else {
-                            Toast.makeText(DoMainQueryActivity.this,expressJson.getMsg(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(QueryActivity.this,expressJson.getMsg(),Toast.LENGTH_LONG).show();
                             myExpressesList.clear();
                             expressAdapter.notifyDataSetChanged();
                             layout_show.setVisibility(View.GONE);
                         }
+                        dialog.cancleDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(DoMainQueryActivity.this,volleyError.toString(),Toast.LENGTH_SHORT).show();
+                dialog.cancleDialog();
+                Toast.makeText(QueryActivity.this,volleyError.toString(),Toast.LENGTH_SHORT).show();
                 myExpressesList.clear();
                 expressAdapter.notifyDataSetChanged();
                 layout_show.setVisibility(View.GONE);
@@ -229,9 +241,11 @@ public class DoMainQueryActivity extends AppCompatActivity {
         mQueue.add(gsonRequest);
     }
     public void onEventMainThread(String s) {
+        dialog.cancleDialog();
         arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,nameList);
-        spinner.setAdapter((SpinnerAdapter) arrayAdapter);
+                R.layout.spinner_item_layout,nameList);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item_layout1);
+        spinner.setAdapter(arrayAdapter);
         spinner.setSelection(0);
     }
     public void onEventMainThread(TypeEvent data) {

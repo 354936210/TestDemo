@@ -1,11 +1,20 @@
 package com.owangwang.easymock;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +27,7 @@ import com.owangwang.easymock.bean.RefreshEvent;
 import com.owangwang.easymock.bean.SaveEvent;
 import com.owangwang.easymock.bean.WoDeKuaiDi;
 import com.owangwang.easymock.utils.AppConfig;
+import com.owangwang.easymock.utils.ExitApplication;
 
 import org.litepal.crud.DataSupport;
 
@@ -26,16 +36,67 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
+    private ImageView iv_open;
     private TextView tv_note;
     private SwipeRefreshLayout refreshLayout;
     private RequestQueue mQueue;
     private int count=0;
     private long time;
+    private NavigationView navigationView;
+    DrawerLayout drawerLayout;
+    SharedPreferences preference;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.express_manager_layout);
+        ExitApplication.addAcrivity(this);
+
+        preference=getSharedPreferences("setting_config",MODE_PRIVATE);
+        editor=preference.edit();
+        if (preference.getBoolean("update",true)){
+            Log.d("MainActivity---->","执行检测版本功能");
+        }
+        navigationView=findViewById(R.id.na_v);
+        drawerLayout=findViewById(R.id.dl_swipe);
+        iv_open=findViewById(R.id.iv_open);
+        iv_open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()){
+                    case R.id.it_search:
+                        intent=new Intent(MainActivity.this,QueryActivity.class );
+                        startActivity(intent);
+                        break;
+                    case R.id.it_call:
+                        try {
+                            //第二种方式：可以跳转到添加好友，如果qq号是好友了，直接聊天
+                            String url = "mqqwpa://im/chat?chat_type=wpa&uin=354936210";//uin是发送过去的qq号码
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(MainActivity.this,"请检查是否安装QQ！",Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+                    case R.id.it_set:
+                        intent=new Intent(MainActivity.this,SettingActivity.class );
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
         mQueue=AppConfig.myQueue(this);
         tv_note=findViewById(R.id.tv_note);
         refreshLayout=findViewById(R.id.swipe_refresh);
@@ -155,20 +216,23 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-
-        if (time!=0){
-            long sx=(System.currentTimeMillis()-time)/1000;
-            if (sx<=2){
-                finish();
-            }else {
-                time=System.currentTimeMillis();
-                Toast.makeText(this,"请再次按返回键退出",Toast.LENGTH_LONG).show();
-            }
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawers();
         }else {
-            Toast.makeText(this,"请再次按返回键退出",Toast.LENGTH_LONG).show();
-            time=System.currentTimeMillis();
-        }
 
+            if (time != 0) {
+                long sx = (System.currentTimeMillis() - time) / 1000;
+                if (sx <= 2) {
+                    finish();
+                } else {
+                    time = System.currentTimeMillis();
+                    Toast.makeText(this, "请再次按返回键退出", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(this, "请再次按返回键退出", Toast.LENGTH_LONG).show();
+                time = System.currentTimeMillis();
+            }
+        }
 
     }
 }
