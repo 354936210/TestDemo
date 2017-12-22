@@ -25,6 +25,7 @@ public class MyAlertDialog {
             AlertDialog.Builder builder=new AlertDialog.Builder(context);
             progressView= View.inflate(context, R.layout.progress_layout,null);
             builder.setView(progressView);
+            builder.setCancelable(false);
             alertDialog=builder.create();
         }
         alertDialog.show();

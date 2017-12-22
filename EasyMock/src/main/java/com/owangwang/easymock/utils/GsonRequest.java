@@ -1,4 +1,4 @@
-package com.owangwang.easymock;
+package com.owangwang.easymock.utils;
 
 import android.util.Log;
 

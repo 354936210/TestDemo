@@ -44,9 +44,10 @@
                 android:layout_marginLeft="10dp"
                 android:text="版本号:" />
             <TextView
+                android:id="@+id/tv_version"
                 android:textColor="#fff"
                 android:layout_marginLeft="10dp"
-                android:text="1.0.0"
+                android:text="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

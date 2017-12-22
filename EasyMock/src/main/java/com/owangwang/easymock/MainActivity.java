@@ -17,7 +17,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +36,8 @@ import com.owangwang.easymock.bean.UpdateEvent;
 import com.owangwang.easymock.bean.WoDeKuaiDi;
 import com.owangwang.easymock.utils.AppConfig;
 import com.owangwang.easymock.utils.ExitApplication;
+import com.owangwang.easymock.utils.GsonRequest;
+import com.owangwang.easymock.views.BaseActivity;
 
 import org.litepal.crud.DataSupport;
 
@@ -50,7 +51,7 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private ImageView iv_open;
     private TextView tv_note;
     private SwipeRefreshLayout refreshLayout;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private int count=0;
     private long time;
     private NavigationView navigationView;
+    private TextView tv_version;
     DrawerLayout drawerLayout;
     SharedPreferences preference;
     SharedPreferences.Editor editor;
@@ -69,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.express_manager_layout);
+        //设置左滑菜单中显示的版本号
+        tv_version=findViewById(R.id.tv_version);
+        try {
+            tv_version.setText(getVersionName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mQueue=AppConfig.myQueue(this);
         ExitApplication.addAcrivity(this);
 
@@ -221,20 +230,6 @@ public class MainActivity extends AppCompatActivity {
         });
 //        mQueue.add(gsonRequest);
         return gsonRequest;
-    }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
     }
     @Override
     public void onBackPressed() {

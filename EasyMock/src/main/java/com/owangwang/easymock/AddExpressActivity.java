@@ -31,6 +31,7 @@ import com.owangwang.easymock.bean.SaveEvent;
 import com.owangwang.easymock.bean.WoDeKuaiDi;
 import com.owangwang.easymock.utils.AppConfig;
 import com.owangwang.easymock.utils.ExitApplication;
+import com.owangwang.easymock.utils.GsonRequest;
 
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
@@ -129,8 +130,10 @@ public class AddExpressActivity extends AppCompatActivity implements View.OnClic
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         progressView= View.inflate(AddExpressActivity.this, R.layout.progress_layout,null);
         builder.setView(progressView);
+        builder.setCancelable(false);
         alertDialog=builder.create();
         }
+
         alertDialog.show();
     }
 
