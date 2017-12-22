@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/background"
+    android:orientation="vertical"
+    android:padding="10dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:textSize="17sp"
+            android:textColor="@color/lastColor"
+            android:text="S快递"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textColor="#fff"
+            android:layout_marginLeft="20dp"
+            android:text="一款管理和查询快递的小工具"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>
+<LinearLayout
+
+    android:layout_marginTop="50dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:textSize="17sp"
+        android:textColor="@color/lastColor"
+        android:text="产品团队："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:lineSpacingExtra="5dp"
+        android:text="团队就是我，我就是团队，一个总有天马星空的想法的抠脚程序员!"
+        android:textColor="#fff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:textSize="17sp"
+            android:textColor="@color/lastColor"
+            android:text="官方媒体："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="5dp"
+            android:text="QQ:354936210"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="5dp"
+            android:text="邮箱:354936210@qq.com"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="5dp"
+            android:text="微信:yhwl5213549"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

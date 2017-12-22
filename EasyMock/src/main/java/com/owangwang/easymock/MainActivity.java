@@ -1,7 +1,5 @@
 package com.owangwang.easymock;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -66,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     int serviceVersionCOde=3;
     private String mUrl;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,10 +74,9 @@ public class MainActivity extends AppCompatActivity {
 
         preference=getSharedPreferences("setting_config",MODE_PRIVATE);
         editor=preference.edit();
-        if (preference.getBoolean("update",true)){
+        if (preference.getBoolean("update",false)){
             Log.d("MainActivity---->","执行检测版本功能");
             getNewVersion();
-
         }
         navigationView=findViewById(R.id.na_v);
         drawerLayout=findViewById(R.id.dl_swipe);
@@ -265,17 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static void verifyStoragePermissions(Activity activity) {
-// Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-// We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
-        }
-    }
     /*
  * 获取当前程序的版本名
  */
@@ -312,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
             }else{
                 //否则吐司，说现在是最新的版本
-                Toast.makeText(this,"当前已经是最新的版本",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this,"当前已经是最新的版本",Toast.LENGTH_SHORT).show();
 
             }
         } catch (Exception e) {
@@ -325,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
      * 提示版本更新的对话框
      */
     private void showDialogUpdate() {
-        verifyStoragePermissions(MainActivity.this);
+
         // 这里的属性可以一直设置，因为每次设置后返回的是一个builder对象
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // 设置提示框的标题
