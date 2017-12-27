@@ -243,7 +243,8 @@ public class MainActivity extends BaseActivity {
             if (time != 0) {
                 long sx = (System.currentTimeMillis() - time) / 1000;
                 if (sx <= 2) {
-                    finish();
+                    ExitApplication.exit();
+
                 } else {
                     time = System.currentTimeMillis();
                     Toast.makeText(this, "请再次按返回键退出", Toast.LENGTH_LONG).show();
