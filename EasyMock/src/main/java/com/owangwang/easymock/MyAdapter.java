@@ -86,6 +86,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             tv_touxiang=itemView.findViewById(R.id.tv_touxiang);
             Typeface mtypeface= Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/FZSTK.TTF");
             tv_touxiang.setTypeface(mtypeface);
+            //设置逆时针旋转30度
             tv_touxiang.setRotation(-30);
             iv_delete=itemView.findViewById(R.id.iv_delete);
             iv_delete.setOnClickListener(new View.OnClickListener() {

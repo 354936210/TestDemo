@@ -243,6 +243,8 @@ public class DoMainQueryActivity extends BaseActivity {
         for (String ss:typeList){
             if (ss.equals(s)){
                 tv_name_and_number.setText(nameList.get(i));
+
+                Log.d("Listindexof","这是在typelist中的位置----"+typeList.indexOf(s)+"这是i的数值：----"+i);
                 return;
             }
             i++;

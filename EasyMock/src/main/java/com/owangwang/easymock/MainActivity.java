@@ -233,9 +233,12 @@ public class MainActivity extends BaseActivity {
     }
     @Override
     public void onBackPressed() {
+        //如果左滑菜单是开启状态首先关闭左滑菜单
         if (drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawers();
-        }else {
+        }
+        //如果左滑菜单没开启那么执行检测多次点击才退出程序的逻辑
+        else {
 
             if (time != 0) {
                 long sx = (System.currentTimeMillis() - time) / 1000;
